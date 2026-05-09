@@ -1,5 +1,5 @@
 import { ArrowLeft, ExternalLink, Github, Mail, MessageCircle, Menu } from "lucide-react";
-import type { CSSProperties, MouseEvent } from "react";
+import type { CSSProperties, MouseEvent, RefObject } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { capabilities, Locale, profile, projects } from "./data";
 
@@ -41,7 +41,14 @@ const copy = {
     emptyProjectTitle: "下一项精选作品",
     emptyProjectBody: "预留给未来更成熟的项目案例，新的作品可以替换、置顶或下沉",
     moreProjectsTitle: "查看更多项目",
+    collapseProjectsTitle: "收起项目档案",
+    moreProjectsHint: "点击展开项目档案",
+    collapseProjectsHint: "再次点击收起",
     moreProjectsBody: "后续会把其他项目统一收进这里，形成完整的项目索引",
+    archiveTitle: "项目档案",
+    archiveIntro: "当前收录 1 个真实项目，后续新增作品会继续进入这里",
+    archiveFutureTitle: "后续项目",
+    archiveFutureBody: "新的项目会按质量和展示优先级加入，而不是简单按时间堆叠",
     contactTitle: "联系我",
     contactIntro: "期待与志同道合的伙伴一起，创造有意义的 AI 产品",
     city: "坐标",
@@ -76,7 +83,14 @@ const copy = {
     emptyProjectTitle: "Next featured work",
     emptyProjectBody: "Reserved for a stronger future case. New work can replace, move ahead, or move down",
     moreProjectsTitle: "View more projects",
+    collapseProjectsTitle: "Close project archive",
+    moreProjectsHint: "Open project archive",
+    collapseProjectsHint: "Click again to close",
     moreProjectsBody: "Future projects will be collected here as a full project index",
+    archiveTitle: "Project Archive",
+    archiveIntro: "Currently includes 1 real project. Future work will be added here",
+    archiveFutureTitle: "Upcoming projects",
+    archiveFutureBody: "New projects will be added by quality and display priority, not only by date",
     contactTitle: "Contact Me",
     contactIntro: "Looking forward to building meaningful AI products with people who care about the same things.",
     city: "Location",
@@ -162,6 +176,8 @@ function HomePage({ locale }: { locale: Locale }) {
     [],
   );
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [showArchive, setShowArchive] = useState(false);
+  const archiveRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!window.location.hash) return;
@@ -170,6 +186,13 @@ function HomePage({ locale }: { locale: Locale }) {
       document.getElementById(id)?.scrollIntoView({ block: "start" });
     });
   }, []);
+
+  useEffect(() => {
+    if (!showArchive) return;
+    window.requestAnimationFrame(() => {
+      archiveRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [showArchive]);
 
   return (
     <main className="site-texture">
@@ -218,7 +241,8 @@ function HomePage({ locale }: { locale: Locale }) {
           ))}
           <ProjectPlaceholder locale={locale} index={2} />
           <ProjectPlaceholder locale={locale} index={3} />
-          <MoreProjects locale={locale} />
+          <MoreProjects expanded={showArchive} locale={locale} onToggle={() => setShowArchive((value) => !value)} />
+          {showArchive && <ProjectArchive archiveRef={archiveRef} locale={locale} />}
         </div>
       </section>
 
@@ -410,13 +434,52 @@ function ProjectPlaceholder({ locale, index }: { locale: Locale; index: number }
   );
 }
 
-function MoreProjects({ locale }: { locale: Locale }) {
+function MoreProjects({
+  expanded,
+  locale,
+  onToggle,
+}: {
+  expanded: boolean;
+  locale: Locale;
+  onToggle: () => void;
+}) {
   const t = copy[locale];
 
   return (
-    <a className="project-row more-projects" href={sectionHref("#projects")}>
-      <span>{t.moreProjectsTitle}</span>
-    </a>
+    <button className={`project-row more-projects ${expanded ? "is-open" : ""}`} type="button" onClick={onToggle} aria-expanded={expanded}>
+      <span>{expanded ? t.collapseProjectsTitle : t.moreProjectsTitle}</span>
+      <small>{expanded ? t.collapseProjectsHint : t.moreProjectsHint}</small>
+    </button>
+  );
+}
+
+function ProjectArchive({ archiveRef, locale }: { archiveRef: RefObject<HTMLDivElement | null>; locale: Locale }) {
+  const t = copy[locale];
+  const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
+
+  return (
+    <div className="project-archive" ref={archiveRef}>
+      <div className="archive-head">
+        <h3>{t.archiveTitle}</h3>
+        <p>{t.archiveIntro}</p>
+      </div>
+      <div className="archive-grid">
+        {sortedProjects.map((project) => (
+          <a className="archive-item" href={appHref(project.detailPath)} key={project.slug}>
+            <span>{String(project.order).padStart(2, "0")}</span>
+            <strong>{project.title}</strong>
+            <small>{project.subtitle[locale]}</small>
+            <em>{t.openCase}</em>
+          </a>
+        ))}
+        <article className="archive-item archive-item-muted">
+          <span>{String(sortedProjects.length + 1).padStart(2, "0")}</span>
+          <strong>{t.archiveFutureTitle}</strong>
+          <small>{t.archiveFutureBody}</small>
+          <em>Reserved</em>
+        </article>
+      </div>
+    </div>
   );
 }
 

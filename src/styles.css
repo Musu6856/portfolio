@@ -244,7 +244,77 @@ body {
   }
 
   .more-projects {
-    @apply grid min-h-36 place-items-center text-3xl font-black hover:-translate-y-0.5 hover:bg-[#fffdf8] md:text-4xl;
+    @apply flex min-h-36 w-full cursor-pointer flex-col items-center justify-center gap-3 text-3xl font-black md:text-4xl;
+    font-family: inherit;
+  }
+
+  .more-projects small {
+    @apply text-sm font-bold text-neutral-400 md:text-base;
+  }
+
+  .more-projects.is-open {
+    @apply bg-black text-white;
+  }
+
+  .more-projects.is-open small {
+    @apply text-white/55;
+  }
+
+  .project-archive {
+    @apply overflow-hidden rounded-[1.65rem] border border-black/[0.08] bg-[#fffdf8] p-7 shadow-[0_16px_50px_rgba(0,0,0,0.026)] md:p-10;
+    animation: archive-open 260ms ease-out both;
+  }
+
+  .archive-head {
+    @apply mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between;
+  }
+
+  .archive-head h3 {
+    @apply text-4xl font-black leading-none md:text-6xl;
+  }
+
+  .archive-head p {
+    @apply max-w-xl text-base font-semibold leading-7 text-neutral-500;
+  }
+
+  .archive-grid {
+    @apply grid gap-4 md:grid-cols-2;
+  }
+
+  .archive-item {
+    @apply relative flex min-h-48 flex-col justify-end rounded-2xl border border-black/[0.08] bg-[#f8f5ef] p-6 text-neutral-950 no-underline transition hover:-translate-y-0.5 hover:bg-black hover:text-white;
+  }
+
+  .archive-item span {
+    @apply absolute right-5 top-5 text-3xl font-black text-neutral-400;
+  }
+
+  .archive-item strong {
+    @apply text-3xl font-black;
+  }
+
+  .archive-item small {
+    @apply mt-3 max-w-md text-base font-semibold leading-7 text-neutral-500;
+  }
+
+  .archive-item em {
+    @apply mt-6 text-sm font-black not-italic text-neutral-400;
+  }
+
+  .archive-item:hover span,
+  .archive-item:hover small,
+  .archive-item:hover em {
+    @apply text-white/65;
+  }
+
+  .archive-item-muted {
+    @apply hover:translate-y-0 hover:bg-[#f8f5ef] hover:text-neutral-950;
+  }
+
+  .archive-item-muted:hover span,
+  .archive-item-muted:hover small,
+  .archive-item-muted:hover em {
+    @apply text-neutral-400;
   }
 
   .project-note {
@@ -404,6 +474,18 @@ body {
 
   .case-row p:not(.eyebrow) {
     @apply mt-5 max-w-4xl text-lg leading-8 text-neutral-600;
+  }
+
+  @keyframes archive-open {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
