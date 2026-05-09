@@ -9,6 +9,25 @@ const navItems = [
   { href: "#contact", zh: "联系", en: "Contact" },
 ];
 
+const appBasePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function getAppPath(pathname: string) {
+  if (!appBasePath || !pathname.startsWith(appBasePath)) {
+    return pathname;
+  }
+
+  return pathname.slice(appBasePath.length) || "/";
+}
+
+function appHref(path: string) {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${appBasePath}${normalizedPath}`;
+}
+
+function sectionHref(hash: string) {
+  return `${appHref("/")}${hash}`;
+}
+
 const copy = {
   zh: {
     scrollHint: "向下滑动继续查看",
@@ -84,7 +103,8 @@ const copy = {
 
 function App() {
   const [locale, setLocale] = useState<Locale>("zh");
-  const activeProject = projects.find((project) => project.detailPath === window.location.pathname);
+  const activePath = getAppPath(window.location.pathname);
+  const activeProject = projects.find((project) => project.detailPath === activePath);
 
   return (
     <div className="min-h-screen bg-[#f8f5ef] text-neutral-950">
@@ -104,12 +124,12 @@ function SiteChrome({
   return (
     <header className="fixed left-0 right-0 top-0 z-50 bg-[#fffdf8]/95 backdrop-blur-xl">
       <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center px-5 md:px-8">
-        <a href="/" className="justify-self-start text-lg font-black">
+        <a href={appHref("/")} className="justify-self-start text-lg font-black">
           Musu
         </a>
         <nav className="hidden items-center md:flex">
           {navItems.map((item) => (
-            <a key={item.href} className="nav-pill" href={`/${item.href}`}>
+            <a key={item.href} className="nav-pill" href={sectionHref(item.href)}>
               {item[locale]}
             </a>
           ))}
@@ -367,7 +387,7 @@ function ProjectCard({
           ))}
         </div>
         <p className="project-summary">{project.summary[locale]}</p>
-        <a className="project-case-link" href={project.detailPath}>
+        <a className="project-case-link" href={appHref(project.detailPath)}>
           {t.openCase}
         </a>
       </div>
@@ -394,7 +414,7 @@ function MoreProjects({ locale }: { locale: Locale }) {
   const t = copy[locale];
 
   return (
-    <a className="project-row more-projects" href="#projects">
+    <a className="project-row more-projects" href={sectionHref("#projects")}>
       <span>{t.moreProjectsTitle}</span>
     </a>
   );
@@ -473,7 +493,7 @@ function ProjectDetail({ locale, project }: { locale: Locale; project: (typeof p
       <section className="detail-hero">
         <LetterField text={project.title.toUpperCase()} />
         <div className="detail-hero-content">
-          <a className="detail-back-link" href="/#projects">
+          <a className="detail-back-link" href={sectionHref("#projects")}>
             <ArrowLeft size={18} />
             {t.backHome}
           </a>
