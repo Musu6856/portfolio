@@ -35,6 +35,11 @@ body {
 
   .hero-grid {
     @apply relative min-h-screen overflow-hidden border-b border-black/10 bg-[#f8f5ef];
+    --hero-tilt-x: 0deg;
+    --hero-tilt-y: 0deg;
+    --hero-shift-x: 0px;
+    --hero-shift-y: 0px;
+    perspective: 1200px;
   }
 
   .dot-field {
@@ -45,27 +50,60 @@ body {
 
   .hero-content {
     @apply relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-5 pt-16 text-center md:px-8;
+    pointer-events: none;
   }
 
   .hero-content h1 {
     @apply max-w-6xl text-6xl font-black leading-none sm:text-7xl md:text-8xl lg:text-9xl;
+    transform: perspective(1000px) rotateX(var(--hero-tilt-x)) rotateY(var(--hero-tilt-y)) translate3d(var(--hero-shift-x), var(--hero-shift-y), 0);
+    transform-origin: center;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  .hero-grid:hover .hero-content h1 {
+    transition-duration: 80ms;
+  }
+
+  .hero-greeting,
+  .hero-name {
+    display: inline-block;
+  }
+
+  .hero-name-en {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 500;
+    transform: none;
+  }
+
+  .hero-name-zh {
+    font-family: "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
+    font-weight: 500;
+    transform: skewX(-7deg);
   }
 
   .hero-content.is-inverted h1 {
     @apply text-white;
+    text-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+    transform: perspective(1000px) rotateX(var(--hero-tilt-x)) rotateY(var(--hero-tilt-y)) translate3d(var(--hero-shift-x), var(--hero-shift-y), 0) scale(0.96);
   }
 
   .hero-spotlight {
     @apply pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-150;
-    background-color: #050505;
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.22) 1px, transparent 0);
-    background-size: 34px 34px;
+    background-color: #030303;
+    background-image:
+      radial-gradient(circle at var(--spot-x) var(--spot-y), rgba(255, 255, 255, 0.075), transparent 58%),
+      radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.24) 1px, transparent 0);
+    background-repeat: no-repeat, repeat;
+    background-size: 100% 100%, 34px 34px;
     clip-path: circle(0 at var(--spot-x) var(--spot-y));
+    will-change: clip-path;
   }
 
   .hero-spotlight.is-active {
     @apply opacity-100;
-    clip-path: circle(175px at var(--spot-x) var(--spot-y));
+    clip-path: circle(205px at var(--spot-x) var(--spot-y));
   }
 
   .scroll-hint {
@@ -500,7 +538,7 @@ body {
   }
 
   .hero-spotlight.is-active {
-    clip-path: circle(125px at var(--spot-x) var(--spot-y));
+    clip-path: circle(145px at var(--spot-x) var(--spot-y));
   }
 
   .skill-metrics b {

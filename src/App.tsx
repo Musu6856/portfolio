@@ -256,25 +256,57 @@ function HomePage({ locale }: { locale: Locale }) {
 function Hero({ locale }: { locale: Locale }) {
   const t = copy[locale];
   const [spotlightActive, setSpotlightActive] = useState(false);
-  const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
+  const [spotlight, setSpotlight] = useState({
+    x: 0,
+    y: 0,
+    tiltX: 0,
+    tiltY: 0,
+    shiftX: 0,
+    shiftY: 0,
+  });
   const spotlightStyle = {
     "--spot-x": `${spotlight.x}px`,
     "--spot-y": `${spotlight.y}px`,
+    "--hero-tilt-x": `${spotlight.tiltX}deg`,
+    "--hero-tilt-y": `${spotlight.tiltY}deg`,
+    "--hero-shift-x": `${spotlight.shiftX}px`,
+    "--hero-shift-y": `${spotlight.shiftY}px`,
   } as CSSProperties;
 
   function handleMouseMove(event: MouseEvent<HTMLElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const normalizedX = (x / rect.width - 0.5) * 2;
+    const normalizedY = (y / rect.height - 0.5) * 2;
+
+    setSpotlightActive(true);
     setSpotlight({
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
+      x,
+      y,
+      tiltX: -normalizedY * 20,
+      tiltY: normalizedX * 28,
+      shiftX: normalizedX * 64,
+      shiftY: normalizedY * 48,
     });
+  }
+
+  function handleMouseLeave() {
+    setSpotlightActive(false);
+    setSpotlight((current) => ({
+      ...current,
+      tiltX: 0,
+      tiltY: 0,
+      shiftX: 0,
+      shiftY: 0,
+    }));
   }
 
   return (
     <section
       className="hero-grid"
       onMouseEnter={() => setSpotlightActive(true)}
-      onMouseLeave={() => setSpotlightActive(false)}
+      onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
       style={spotlightStyle}
     >
@@ -294,7 +326,10 @@ function HeroContent({ locale, inverted = false }: { locale: Locale; inverted?: 
   return (
     <div className={`hero-content ${inverted ? "is-inverted" : ""}`}>
       <h1>
-        {heroLine} {profile.name[locale]}
+        <span className="hero-greeting">{heroLine}</span>{" "}
+        <span className={`hero-name ${locale === "zh" ? "hero-name-zh" : "hero-name-en"}`}>
+          {profile.name[locale]}
+        </span>
       </h1>
     </div>
   );
