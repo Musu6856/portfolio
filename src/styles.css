@@ -49,12 +49,12 @@ body {
   }
 
   .hero-content {
-    @apply relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-5 pt-16 text-center md:px-8;
+    @apply relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-5 text-center md:px-8;
     pointer-events: none;
   }
 
   .hero-content h1 {
-    @apply max-w-6xl text-6xl font-black leading-none sm:text-7xl md:text-8xl lg:text-9xl;
+    @apply max-w-6xl text-6xl font-black leading-none sm:text-7xl md:text-[5.6rem] lg:text-[7.35rem];
     transform: perspective(1000px) rotateX(var(--hero-tilt-x)) rotateY(var(--hero-tilt-y)) translate3d(var(--hero-shift-x), var(--hero-shift-y), 0);
     transform-origin: center;
     transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
