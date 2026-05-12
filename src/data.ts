@@ -353,4 +353,82 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    slug: "weblearnboost",
+    featured: true,
+    order: 2,
+    status: {
+      zh: "v0.1.0 / 试用版",
+      en: "v0.1.0 / Test release",
+    },
+    year: "2026",
+    tags: ["Browser Extension", "AI Learning", "PRD", "MVP"],
+    title: "WebLearnBoost",
+    subtitle: {
+      zh: "把网页资料转成学习地图和训练题的浏览器扩展",
+      en: "Browser extension that turns web pages into learning maps and practice questions",
+    },
+    summary: {
+      zh: "面向 AI 技术自学者，把当前网页或选中文本转成学习地图、重点摘要、选择题训练、本地历史和可导出的 Markdown 学习包，验证从阅读到复习的轻量学习闭环",
+      en: "Helps AI learners turn a page or selected text into a learning map, key summary, quiz flow, local history, and Markdown study package.",
+    },
+    detailPath: "/projects/weblearnboost",
+    sections: [
+      {
+        label: "Overview",
+        title: {
+          zh: "项目概览",
+          en: "Overview",
+        },
+        body: {
+          zh: "WebLearnBoost 是一个 Chrome / Edge 浏览器扩展试用版，用侧边栏把网页资料转成可学习、可复习、可验证的学习包。第一版重点验证主流程：读网页、生成学习地图、进入训练题、查看原文依据、保存历史并导出 Markdown。",
+          en: "WebLearnBoost is a Chrome / Edge extension prototype that turns web pages into study packages inside a sidebar. The first release validates the core loop: read a page, generate a learning map, answer practice questions, inspect source evidence, save history, and export Markdown.",
+        },
+      },
+      {
+        label: "Problem",
+        title: {
+          zh: "问题：网页学习缺少闭环",
+          en: "Problem: web learning lacks a loop",
+        },
+        body: {
+          zh: "自学 RAG、Agent、MCP、tool calling 等 AI 技术内容时，用户常常不是完全看不懂，而是看完后讲不清结构、抓不住重点，也缺少验证自己是否真正理解的环节。普通摘要工具能压缩文本，但很难提供学习路径、练习反馈和回到原文核对的能力。",
+          en: "When people self-study AI engineering topics such as RAG, agents, MCP, and tool calling, the issue is often not pure comprehension. They can read the page, but struggle to retain structure, identify key points, and verify understanding. A normal summarizer compresses text, but rarely creates a learning path, practice feedback, or source-grounded review.",
+        },
+      },
+      {
+        label: "Scope",
+        title: {
+          zh: "MVP 范围",
+          en: "MVP scope",
+        },
+        body: {
+          zh: "第一版只做一个完整学习闭环：整页或选中段落生成、学习地图、重点摘要、选择题自测、答题反馈、原文依据、本地历史、删除历史版本、Markdown 导出，以及 OpenAI Compatible 和 Anthropic Compatible 两类模型接口配置。",
+          en: "The MVP focuses on one complete learning loop: whole-page or selected-text generation, learning map, key summary, multiple-choice self-test, answer feedback, source evidence, local history, history deletion, Markdown export, and model setup for OpenAI Compatible and Anthropic Compatible providers.",
+        },
+      },
+      {
+        label: "Product",
+        title: {
+          zh: "产品取舍：先定路径，再进入训练",
+          en: "Product choice: map first, train second",
+        },
+        body: {
+          zh: "产品没有把目标定成“更快生成一段摘要”，而是先让用户看到学习路径、核心结构和推荐阅读顺序，再进入重点摘要和训练题。这个顺序让 AI 输出从内容替代变成学习辅助，也让用户保留回到原文判断的空间。",
+          en: "The product goal is not simply to generate a faster summary. It first shows a learning path, core structure, and recommended reading order, then moves into summary and quiz training. This makes the AI output a learning aid rather than a replacement for judgment, while keeping source review available.",
+        },
+      },
+      {
+        label: "Delivery",
+        title: {
+          zh: "交付与验证",
+          en: "Delivery and validation",
+        },
+        body: {
+          zh: "项目已经整理了 PRD、原型说明、开发说明、手动测试清单、隐私说明、安装指南和 v0.1.0 Release Notes。试用版通过压缩包分发，用户在扩展管理页加载已解压目录即可测试，设置和历史记录保存在浏览器本地，不做云同步。",
+          en: "The project includes a PRD, prototype notes, development notes, manual test checklist, privacy notes, installation guide, and v0.1.0 release notes. The test release is distributed as a zip package and loaded manually through the browser extension page. Settings and history stay in local browser storage, with no cloud sync.",
+        },
+      },
+    ],
+  },
 ];

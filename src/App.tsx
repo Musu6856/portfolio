@@ -46,7 +46,7 @@ const copy = {
     collapseProjectsHint: "再次点击收起",
     moreProjectsBody: "后续会把其他项目统一收进这里，形成完整的项目索引",
     archiveTitle: "项目档案",
-    archiveIntro: "当前收录 1 个真实项目，后续新增作品会继续进入这里",
+    archiveIntro: "当前收录 2 个真实项目，后续新增作品会继续进入这里",
     archiveFutureTitle: "后续项目",
     archiveFutureBody: "新的项目会按质量和展示优先级加入，而不是简单按时间堆叠",
     contactTitle: "联系我",
@@ -88,7 +88,7 @@ const copy = {
     collapseProjectsHint: "Click again to close",
     moreProjectsBody: "Future projects will be collected here as a full project index",
     archiveTitle: "Project Archive",
-    archiveIntro: "Currently includes 1 real project. Future work will be added here",
+    archiveIntro: "Currently includes 2 real projects. Future work will be added here",
     archiveFutureTitle: "Upcoming projects",
     archiveFutureBody: "New projects will be added by quality and display priority, not only by date",
     contactTitle: "Contact Me",
@@ -236,11 +236,10 @@ function HomePage({ locale }: { locale: Locale }) {
       <section id="projects" className="section-shell">
         <SectionHeading title={t.projectsTitle} />
         <div className="project-list">
-          {featuredProjects.slice(0, 1).map((project, index) => (
+          {featuredProjects.map((project, index) => (
             <ProjectCard key={project.slug} locale={locale} project={project} index={index} />
           ))}
-          <ProjectPlaceholder locale={locale} index={2} />
-          <ProjectPlaceholder locale={locale} index={3} />
+          {featuredProjects.length < 3 && <ProjectPlaceholder locale={locale} index={featuredProjects.length + 1} />}
           <MoreProjects expanded={showArchive} locale={locale} onToggle={() => setShowArchive((value) => !value)} />
           {showArchive && <ProjectArchive archiveRef={archiveRef} locale={locale} />}
         </div>
