@@ -603,9 +603,30 @@ function ProjectDetail({ locale, project }: { locale: Locale; project: (typeof p
         <div className="meta-grid">
           <MetaRow label={t.status} value={project.status[locale]} />
           <MetaRow label={t.year} value={project.year} />
-          <MetaRow label={t.links} value={project.liveUrl ? t.liveDemo : "TBD"} href={project.liveUrl} />
+          <MetaRow label={t.links} value={project.liveUrl ? project.linkLabel?.[locale] ?? t.liveDemo : "TBD"} href={project.liveUrl} />
         </div>
       </section>
+
+      {(project.caseSummary || project.facts?.length) && (
+        <section className="mx-auto max-w-7xl px-5 pt-12 md:px-8">
+          {project.caseSummary && (
+            <article className="case-summary">
+              <span>{t.detailKicker}</span>
+              <p>{project.caseSummary[locale]}</p>
+            </article>
+          )}
+          {project.facts?.length ? (
+            <div className="case-facts">
+              {project.facts.map((fact) => (
+                <article className="case-fact" key={fact.label.en}>
+                  <span>{fact.label[locale]}</span>
+                  <strong>{fact.value[locale]}</strong>
+                </article>
+              ))}
+            </div>
+          ) : null}
+        </section>
+      )}
 
       <section className="mx-auto max-w-7xl px-5 py-20 md:px-8">
         <div className="line-list">
@@ -614,7 +635,14 @@ function ProjectDetail({ locale, project }: { locale: Locale; project: (typeof p
               <span className="row-index">{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <h2>{section.title[locale]}</h2>
-                <p>{section.body[locale]}</p>
+                {section.body && <p>{section.body[locale]}</p>}
+                {section.bullets?.length ? (
+                  <ul>
+                    {section.bullets.map((bullet) => (
+                      <li key={bullet.en}>{bullet[locale]}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             </article>
           ))}

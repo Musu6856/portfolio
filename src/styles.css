@@ -490,6 +490,34 @@ body {
     @apply flex min-h-28 items-center justify-center rounded-[1.2rem] border border-black/[0.08] bg-[#fffdf8] p-7 text-center shadow-[0_14px_44px_rgba(0,0,0,0.026)];
   }
 
+  .case-summary {
+    @apply rounded-[1.2rem] border border-black/[0.08] bg-black p-7 text-white shadow-[0_18px_56px_rgba(0,0,0,0.05)] md:p-10;
+  }
+
+  .case-summary span {
+    @apply text-sm font-black uppercase text-white/50;
+  }
+
+  .case-summary p {
+    @apply mt-5 max-w-5xl text-2xl font-semibold leading-10 text-white/90;
+  }
+
+  .case-facts {
+    @apply mt-5 grid gap-4 md:grid-cols-3;
+  }
+
+  .case-fact {
+    @apply min-h-36 rounded-[1.2rem] border border-black/[0.08] bg-[#fffdf8] p-6 shadow-[0_14px_44px_rgba(0,0,0,0.026)];
+  }
+
+  .case-fact span {
+    @apply text-sm font-black uppercase text-neutral-400;
+  }
+
+  .case-fact strong {
+    @apply mt-4 block text-lg font-black leading-7 text-neutral-900;
+  }
+
   .line-list {
     @apply grid gap-5;
   }
@@ -512,6 +540,19 @@ body {
 
   .case-row p:not(.eyebrow) {
     @apply mt-5 max-w-4xl text-lg leading-8 text-neutral-600;
+  }
+
+  .case-row ul {
+    @apply mt-7 grid max-w-5xl gap-4;
+  }
+
+  .case-row li {
+    @apply list-none rounded-xl border border-black/[0.08] bg-[#f8f5ef] px-5 py-4 text-base font-semibold leading-7 text-neutral-700;
+  }
+
+  .case-row li::before {
+    content: "";
+    @apply mr-3 inline-block h-2 w-2 rounded-full bg-black align-middle;
   }
 
   @keyframes archive-open {

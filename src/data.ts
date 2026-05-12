@@ -26,10 +26,17 @@ export type Project = {
   summary: LocalizedText;
   detailPath: string;
   liveUrl?: string;
+  linkLabel?: LocalizedText;
+  caseSummary?: LocalizedText;
+  facts?: Array<{
+    label: LocalizedText;
+    value: LocalizedText;
+  }>;
   sections: Array<{
     label: string;
     title: LocalizedText;
-    body: LocalizedText;
+    body?: LocalizedText;
+    bullets?: LocalizedText[];
   }>;
 };
 
@@ -358,76 +365,172 @@ export const projects: Project[] = [
     featured: true,
     order: 2,
     status: {
-      zh: "v0.1.0 / 试用版",
-      en: "v0.1.0 / Test release",
+      zh: "早期探索 / v0.1.0 试用版",
+      en: "Early exploration / v0.1.0 test release",
     },
     year: "2026",
-    tags: ["Browser Extension", "AI Learning", "PRD", "MVP"],
+    tags: ["Browser Extension", "AI Learning", "User Research", "MVP"],
     title: "WebLearnBoost",
     subtitle: {
       zh: "把网页资料转成学习地图和训练题的浏览器扩展",
       en: "Browser extension that turns web pages into learning maps and practice questions",
     },
     summary: {
-      zh: "面向 AI 技术自学者，把当前网页或选中文本转成学习地图、重点摘要、选择题训练、本地历史和可导出的 Markdown 学习包，验证从阅读到复习的轻量学习闭环",
-      en: "Helps AI learners turn a page or selected text into a learning map, key summary, quiz flow, local history, and Markdown study package.",
+      zh: "面向 AI 技术自学者，把当前网页或选中文本转成学习地图、重点摘要、选择题训练、原文依据、本地历史和 Markdown 学习包，验证从“看懂”到“能复述、能自测”的轻量学习闭环",
+      en: "Turns a page or selected text into a learning map, key summary, quiz flow, source evidence, local history, and Markdown package, testing a lightweight loop from reading to recall.",
     },
     detailPath: "/projects/weblearnboost",
+    caseSummary: {
+      zh: "WebLearnBoost 的核心判断是：AI 技术学习者不只是需要更快看完网页，而是需要在阅读前知道该怎么学，在阅读后确认自己是否真的掌握。这个项目把普通网页变成“学习地图 -> 训练题 -> 原文依据 -> 本地沉淀”的浏览器侧边栏流程，并如实保留当前仍处于早期试用和自访谈验证阶段。",
+      en: "WebLearnBoost starts from a product judgment: AI learners do not only need faster summaries. They need a path before reading and a way to verify understanding after reading. The project turns a web page into a browser-sidebar loop of learning map, practice questions, source evidence, and local study history, while clearly staying in an early test-release stage.",
+    },
+    facts: [
+      {
+        label: {
+          zh: "目标用户",
+          en: "Audience",
+        },
+        value: {
+          zh: "正在自学 RAG、Agent、MCP、AI 框架等内容的技术学习者",
+          en: "Learners studying RAG, agents, MCP, AI frameworks, and related engineering topics",
+        },
+      },
+      {
+        label: {
+          zh: "我的角色",
+          en: "My role",
+        },
+        value: {
+          zh: "问题定义、调研设计、竞品分析、PRD、原型说明、MVP 交付",
+          en: "Problem framing, research plan, competitive analysis, PRD, prototype spec, and MVP delivery",
+        },
+      },
+      {
+        label: {
+          zh: "验证阶段",
+          en: "Validation stage",
+        },
+        value: {
+          zh: "基于真实自学场景和自访谈，计划补充 2-3 个外部技术学习者验证",
+          en: "Based on a real self-learning scenario and self-interview, with 2-3 external learners planned next",
+        },
+      },
+    ],
     sections: [
       {
         label: "Overview",
         title: {
-          zh: "项目概览",
-          en: "Overview",
+          zh: "项目定位：不是摘要器，而是学习闭环工具",
+          en: "Positioning: not a summarizer, but a learning loop",
         },
         body: {
-          zh: "WebLearnBoost 是一个 Chrome / Edge 浏览器扩展试用版，用侧边栏把网页资料转成可学习、可复习、可验证的学习包。第一版重点验证主流程：读网页、生成学习地图、进入训练题、查看原文依据、保存历史并导出 Markdown。",
-          en: "WebLearnBoost is a Chrome / Edge extension prototype that turns web pages into study packages inside a sidebar. The first release validates the core loop: read a page, generate a learning map, answer practice questions, inspect source evidence, save history, and export Markdown.",
+          zh: "WebLearnBoost 是一个 Chrome / Edge 浏览器扩展试用版，入口放在浏览器侧边栏。它不把目标定成“更快总结网页”，而是把当前网页或选中文本转成可学习、可复习、可自测的学习包：先生成学习地图，再进入重点摘要和选择题训练，最后通过原文依据、本地历史和 Markdown 导出完成沉淀。",
+          en: "WebLearnBoost is a Chrome / Edge extension test release that lives in the browser sidebar. It is not designed as a faster page summarizer. It turns the current page or selected text into a study package: first a learning map, then summary and quiz training, then source evidence, local history, and Markdown export for review.",
         },
       },
       {
         label: "Problem",
         title: {
-          zh: "问题：网页学习缺少闭环",
-          en: "Problem: web learning lacks a loop",
+          zh: "问题定义：看懂不等于掌握",
+          en: "Problem: understanding is not mastery",
         },
         body: {
-          zh: "自学 RAG、Agent、MCP、tool calling 等 AI 技术内容时，用户常常不是完全看不懂，而是看完后讲不清结构、抓不住重点，也缺少验证自己是否真正理解的环节。普通摘要工具能压缩文本，但很难提供学习路径、练习反馈和回到原文核对的能力。",
-          en: "When people self-study AI engineering topics such as RAG, agents, MCP, and tool calling, the issue is often not pure comprehension. They can read the page, but struggle to retain structure, identify key points, and verify understanding. A normal summarizer compresses text, but rarely creates a learning path, practice feedback, or source-grounded review.",
+          zh: "在学习 RAG、Agent、MCP、tool calling、workflow 等 AI 技术资料时，痛点通常不是完全看不懂，而是读的时候觉得合理，离开网页后却讲不清结构，也不知道核心概念、限制条件和常见坑点有没有漏掉。直接问 AI 能降低理解门槛，但回答覆盖范围不可见；普通摘要能压缩文本，却很少帮助用户确认自己是否真的掌握。",
+          en: "When learning AI engineering topics such as RAG, agents, MCP, tool calling, and workflow design, the issue is often not complete confusion. Learners may understand the page while reading, but struggle to explain the structure later or know whether key concepts, limitations, and pitfalls were missed. Chatting with AI lowers the barrier, but coverage is invisible; summarization compresses text, but rarely verifies mastery.",
         },
       },
       {
-        label: "Scope",
+        label: "Research",
         title: {
-          zh: "MVP 范围",
-          en: "MVP scope",
+          zh: "调研依据：早期探索，不伪装成大样本结论",
+          en: "Research basis: early exploration, not overclaimed",
         },
         body: {
-          zh: "第一版只做一个完整学习闭环：整页或选中段落生成、学习地图、重点摘要、选择题自测、答题反馈、原文依据、本地历史、删除历史版本、Markdown 导出，以及 OpenAI Compatible 和 Anthropic Compatible 两类模型接口配置。",
-          en: "The MVP focuses on one complete learning loop: whole-page or selected-text generation, learning map, key summary, multiple-choice self-test, answer feedback, source evidence, local history, history deletion, Markdown export, and model setup for OpenAI Compatible and Anthropic Compatible providers.",
+          zh: "第一轮验证来自真实自学场景和自访谈：学习 RAG 资料时，最强的问题不是“缺少答案”，而是学习路径不确定、学完讲不清、整理成本高、AI 回答缺少可信依据。这个阶段没有包装成外部用户验证完成，而是把它作为早期探索输入，并明确下一步需要补充 2-3 个外部技术学习者来校正痛点排序和功能优先级。",
+          en: "The first validation input comes from a real self-learning scenario and a self-interview. While learning RAG material, the strongest pain points were not lack of answers, but unclear learning path, weak recall after reading, high note-taking cost, and limited trust in AI answers without source evidence. This is treated as early exploration, not finished external validation; the next step is to interview 2-3 external technical learners.",
         },
       },
       {
-        label: "Product",
+        label: "Competitors",
         title: {
-          zh: "产品取舍：先定路径，再进入训练",
-          en: "Product choice: map first, train second",
+          zh: "竞品判断：借入口，不走摘要中心路线",
+          en: "Competitive view: borrow the entry point, avoid summary-first design",
         },
-        body: {
-          zh: "产品没有把目标定成“更快生成一段摘要”，而是先让用户看到学习路径、核心结构和推荐阅读顺序，再进入重点摘要和训练题。这个顺序让 AI 输出从内容替代变成学习辅助，也让用户保留回到原文判断的空间。",
-          en: "The product goal is not simply to generate a faster summary. It first shows a learning path, core structure, and recommended reading order, then moves into summary and quiz training. This makes the AI output a learning aid rather than a replacement for judgment, while keeping source review available.",
+        bullets: [
+          {
+            zh: "NotebookLM 证明“来源驱动的学习包”成立，但它更像项目 notebook；WebLearnBoost 选择更轻的当前网页侧边栏入口。",
+            en: "NotebookLM validates source-grounded study packages, but behaves more like a project notebook; WebLearnBoost chooses a lighter current-page sidebar entry.",
+          },
+          {
+            zh: "Glasp 证明网页捕获、笔记和导出有价值，但它更强在沉淀；WebLearnBoost 需要把内容继续转成学习路径和自测。",
+            en: "Glasp validates capture, notes, and export, but is stronger at collection; WebLearnBoost pushes the material into learning path and self-test.",
+          },
+          {
+            zh: "Anki / Quizlet 证明主动回忆和练习是学习闭环关键；WebLearnBoost 的第一版借这个机制，但不直接做重型复习系统。",
+            en: "Anki and Quizlet validate active recall and practice; WebLearnBoost borrows that mechanism without becoming a heavy spaced-repetition system.",
+          },
+          {
+            zh: "网页摘要插件证明侧边栏入口足够低摩擦，但多数停留在“这页在说什么”；WebLearnBoost 要回答“我有没有学会”。",
+            en: "Page summarizer extensions prove that sidebar entry is low-friction, but most answer what the page says; WebLearnBoost asks whether the learner has learned it.",
+          },
+        ],
+      },
+      {
+        label: "MVP",
+        title: {
+          zh: "MVP 取舍：先完整闭环，再扩功能",
+          en: "MVP choice: complete loop before more features",
         },
+        bullets: [
+          {
+            zh: "输入范围只保留整页和选中段落，先覆盖最常见的网页学习场景。",
+            en: "Input scope is limited to whole page and selected text to cover the most common page-learning scenarios first.",
+          },
+          {
+            zh: "主流程固定为学习地图、重点摘要、选择题自测、答题反馈和原文依据，确保用户不是只拿到一段总结。",
+            en: "The main flow is fixed as learning map, key summary, quiz, answer feedback, and source evidence, so the output is more than a summary.",
+          },
+          {
+            zh: "支撑功能包括本地历史、删除历史版本、Markdown 导出、Provider / Base URL / API Key / Model / 输出语言设置。",
+            en: "Supporting capabilities include local history, history deletion, Markdown export, and provider/base URL/API key/model/output language settings.",
+          },
+          {
+            zh: "第一版暂不做 PDF、YouTube、移动端、账号系统、云同步和知识库聚合，避免把试用版做成过大的学习平台。",
+            en: "The first release intentionally excludes PDF, YouTube, mobile, accounts, cloud sync, and knowledge-base aggregation to avoid an oversized learning platform.",
+          },
+        ],
       },
       {
         label: "Delivery",
         title: {
-          zh: "交付与验证",
-          en: "Delivery and validation",
+          zh: "交付状态：能试用，也保留边界",
+          en: "Delivery: testable, with clear boundaries",
         },
         body: {
-          zh: "项目已经整理了 PRD、原型说明、开发说明、手动测试清单、隐私说明、安装指南和 v0.1.0 Release Notes。试用版通过压缩包分发，用户在扩展管理页加载已解压目录即可测试，设置和历史记录保存在浏览器本地，不做云同步。",
-          en: "The project includes a PRD, prototype notes, development notes, manual test checklist, privacy notes, installation guide, and v0.1.0 release notes. The test release is distributed as a zip package and loaded manually through the browser extension page. Settings and history stay in local browser storage, with no cloud sync.",
+          zh: "当前项目已经有可构建的浏览器扩展、v0.1.0 试用包、安装指南、隐私说明、Release Notes、手动测试清单，以及问题定义、用户调研、竞品分析、PRD、原型说明和开发说明等产品文档。试用方式是通过压缩包或构建产物加载已解压扩展；API Key、设置和历史记录保存在浏览器本地，不做云同步。",
+          en: "The project currently includes a buildable browser extension, v0.1.0 test package, installation guide, privacy notes, release notes, manual test checklist, plus product documents for problem definition, research, competitive analysis, PRD, prototype spec, and development notes. The test release is loaded manually as an unpacked extension; API key, settings, and history stay in local browser storage.",
         },
+      },
+      {
+        label: "Next",
+        title: {
+          zh: "限制与下一步",
+          en: "Limits and next steps",
+        },
+        bullets: [
+          {
+            zh: "补充 2-3 个外部技术学习者访谈，验证自访谈结论是否能扩展到更广义的技术学习场景。",
+            en: "Add interviews with 2-3 external technical learners to check whether the self-interview findings generalize.",
+          },
+          {
+            zh: "用真实网页测试学习地图质量、题目难度、原文依据可用性和等待时间，避免只在理想样例里成立。",
+            en: "Test with real pages for learning-map quality, quiz difficulty, source evidence usefulness, and waiting time.",
+          },
+          {
+            zh: "根据外部反馈决定概念卡、对比卡、原文定位和历史复习的优先级，而不是继续堆功能。",
+            en: "Use feedback to prioritize concept cards, comparison cards, source positioning, and review history instead of adding features by default.",
+          },
+        ],
       },
     ],
   },
